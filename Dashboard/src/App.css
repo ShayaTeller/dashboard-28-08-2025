@@ -1,0 +1,193 @@
+/* החלת box-sizing על כל האלמנטים למניעת בעיות גודל */
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* שונה מ-height למניעת חיתוך תוכן */
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  display: flex; /* הפך את root ל-flexbox */
+  flex-direction: column; /* פריסה אנכית */
+}
+
+/* ====== Layout containers ====== */
+.app__main {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* יחס נוח יותר - אמצע רחב יותר */
+  gap: 10px;
+  flex: 1; /* תופס את כל המקום הפנוי */
+  background-color: rgb(245, 202, 202);
+  padding: 10px; /* שונה מ-% ליחידות קבועות */
+  min-height: 0; /* מונע בעיות overflow בגריד */
+}
+
+/* ====== Header ====== */
+.header {
+  font-size: 1.5rem; /* שונה מ-x-large ליחידות מדויקות יותר */
+  text-align: center;
+  font-weight: 600;
+  background-color: chartreuse;
+  padding: 15px 0; /* שונה מ-height לpadding גמיש */
+  flex-shrink: 0; /* מונע כיווץ של הheader */
+}
+
+/* ====== FilterBar ====== */
+.filter-bar {
+  grid-column: 1/-1; /* תופס את כל הרוחב בגריד */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* הוסף יישור אנכי */
+  gap: 20px; /* הגדלתי הרווח בין הכפתורים */
+  background-color: aqua;
+  padding: 15px; /* הגדלתי הpadding לגובה נוח יותר */
+  /* min-height: 60px; הוספתי גובה מינימלי קבוע */
+  flex-wrap: wrap; /* מאפשר עטיפה במסכים קטנים */
+  flex-shrink: 0;
+
+}
+
+/* ====== Container לכל 3 האזורים התחתונים ====== */
+.content-sections {
+  grid-column: 1/-1; /* תופס את כל הרוחב */
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* אותו יחס כמו הparent */
+  gap: 10px;
+  min-height: 0; /* מונע בעיות overflow */
+}
+
+/* ====== Notice ====== */
+.notice {
+  background-color: blue;
+  padding: 20px; /* הוחלף height/width בpadding */
+  overflow-y: auto; /* גלילה במידת הצורך */
+}
+
+/* ====== MembersList ====== */
+.members-list {
+  
+  background-color: rgb(128, 128, 238);
+  padding: 20px; /* הוחלף height/width בpadding */
+  overflow-y: auto; /* גלילה במידת הצורך */
+}
+
+/* תיקון של רשימת החברים */
+.members-list-section-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* רווח אחיד בין כרטיסים */
+  align-items: stretch; /* כרטיסים ברוחב מלא */
+  height: 35rem;
+}
+
+.members-list-section-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 כרטיסים בשורה במקום auto-fit */
+  gap: 15px; /* הגדלתי הרווח בין כרטיסים */
+  width: 100%; /* תופס את כל הרוחב הזמין */
+  height: 35rem;
+}
+
+/* תיקון כרטיס חבר */
+.member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px; /* הגדלתי הpadding */
+  border: 2px solid black;
+  border-radius: 8px; /* עיגול פינות לעיצוב נחמד יותר */
+  background-color: white; /* רקע לבן לקריאות */
+  min-height: 160px; /* הגדלתי גובה מינימלי */
+  justify-content: space-between; /* פיזור אחיד של התוכן */
+  width: 100%; /* תופס רוחב מלא בתוך הגריד */
+}
+
+/* עיצוב אווטר */
+.member-card__avatar {
+  width: 50px; /* הגדלתי גודל אווטר */
+  height: 50px;
+  border-radius: 50%; /* עיגול מושלם */
+  background-color: #666;
+  color: white;
+  display: flex; /* למרכז הטקסט */
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem; /* הגדלתי גופן */
+  margin: 0; /* איפוס margin ברירת מחדל */
+}
+
+/* עיצוב שם ותפקיד */
+.member-card__name {
+  margin: 5px 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.member-card__role {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+/* עיצוב כפתור פעולות */
+.member-card button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.member-card button:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+}
+
+.member-card button:disabled {
+  background-color: #ccc; /* אפור לכפתור מושבת */
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* ====== TasksPanel ====== */
+.tasks-panel {
+  background-color: rgb(197, 197, 254);
+  padding: 20px; /* הוחלף height/width בpadding */
+  overflow-y: auto; /* גלילה במידת הצורך */
+}
+
+/* ====== Footer ====== */
+.footer {
+  font-size: 0.8rem; /* שונה מ-smaller ליחידה מדויקת */
+  background-color: grey;
+  text-align: center;
+  padding: 10px; /* הוסף padding */
+  flex-shrink: 0; /* מונע כיווץ */
+  margin-top: auto; /* דוחף לתחתית */
+}
+
+/* ====== Responsive למסכים קטנים ====== */
+@media (max-width: 768px) {
+  .app__main {
+    grid-template-columns: 1fr; /* עמודה אחת במסכים קטנים */
+    gap: 5px; /* רווח קטן יותר */
+  }
+  
+  .content-sections {
+    grid-template-columns: 1fr; /* גם כאן עמודה אחת */
+  }
+  
+  .filter-bar {
+    flex-direction: column; /* בקרות אנכיות במסכים קטנים */
+    gap: 5px;
+  }
+  
+  .members-list-section-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* כרטיסים קטנים יותר */
+  }
+}
