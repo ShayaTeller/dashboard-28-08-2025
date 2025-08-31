@@ -103,6 +103,7 @@
   min-height: 160px; /* הגדלתי גובה מינימלי */
   justify-content: space-between; /* פיזור אחיד של התוכן */
   width: 100%; /* תופס רוחב מלא בתוך הגריד */
+  color: purple;
 }
 
 /* עיצוב אווטר */
