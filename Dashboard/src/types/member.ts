@@ -3,4 +3,5 @@ export interface Member {
   name: string;
   role: string;
   active?: boolean;
+  taskButton:()=>(id:string)=>void
 }

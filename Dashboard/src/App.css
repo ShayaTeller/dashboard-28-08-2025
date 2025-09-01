@@ -1,194 +1,288 @@
-/* החלת box-sizing על כל האלמנטים למניעת בעיות גודל */
-* {
-  box-sizing: border-box;
+/* ====== Design Tokens (Light base, darker panels) ====== */
+:root{
+  /* צבעים */
+  --bg: #f2f4f8;          /* רקע כללי בהיר */
+  --surface: #ffffff;     /* לבן נקי */
+  --panel: #e9ecf2;       /* פאנלים מעט כהים מהרקע */
+  --panel-strong: #dde2ea;/* פאנלים מודגשים */
+  --text: #1e293b;        /* טקסט ראשי כהה */
+  --text-muted: #475569;  /* טקסט משני */
+  --primary: #2563eb;     /* כחול חד */
+  --accent: #7c3aed;      /* סגול לאוואטר/מבטא */
+  --warn: #ea580c;        /* כתום */
+  --border: #d1d5db;      /* גבולות עדינים */
+  --shadow: 0 2px 10px rgba(30,41,59,0.08);
+
+  /* רדיוסים ומרווחים */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 14px;
+  --space-4: 18px;
+  --space-5: 24px;
+
+  /* גדלים קבועים לכרטיסים */
+  --member-w: 220px;
+  --member-h: 180px;
+  --task-w:  260px;
+  --task-h:  120px;
+
+  --font-base: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial;
 }
 
-#root {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh; /* שונה מ-height למניעת חיתוך תוכן */
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  display: flex; /* הפך את root ל-flexbox */
-  flex-direction: column; /* פריסה אנכית */
+/* ====== Reset + Base ====== */
+* { box-sizing: border-box; }
+html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 var(--font-base);
 }
 
-/* ====== Layout containers ====== */
-.app__main {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr; /* יחס נוח יותר - אמצע רחב יותר */
-  gap: 10px;
-  flex: 1; /* תופס את כל המקום הפנוי */
-  background-color: rgb(245, 202, 202);
-  padding: 10px; /* שונה מ-% ליחידות קבועות */
-  min-height: 0; /* מונע בעיות overflow בגריד */
+/* ====== Root: מסך מלא תמיד, ללא גלילת דף ====== */
+#root{
+  height: 100vh;                 /* גובה מסך */
+  width: 100vw;                  /* רוחב מסך */
+  overflow: hidden;              /* אין גלילת דף */
+  display: flex;
+  flex-direction: column;
 }
 
 /* ====== Header ====== */
-.header {
-  font-size: 1.5rem; /* שונה מ-x-large ליחידות מדויקות יותר */
+.header{
+  background: var(--panel-strong);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-4) var(--space-5);
   text-align: center;
-  font-weight: 600;
-  background-color: chartreuse;
-  padding: 15px 0; /* שונה מ-height לpadding גמיש */
-  flex-shrink: 0; /* מונע כיווץ של הheader */
-}
-
-/* ====== FilterBar ====== */
-.filter-bar {
-  grid-column: 1/-1; /* תופס את כל הרוחב בגריד */
-  display: flex;
-  justify-content: center;
-  align-items: center; /* הוסף יישור אנכי */
-  gap: 20px; /* הגדלתי הרווח בין הכפתורים */
-  background-color: aqua;
-  padding: 15px; /* הגדלתי הpadding לגובה נוח יותר */
-  /* min-height: 60px; הוספתי גובה מינימלי קבוע */
-  flex-wrap: wrap; /* מאפשר עטיפה במסכים קטנים */
+  font-weight: 700;
+  font-size: 1.25rem;
   flex-shrink: 0;
-
 }
 
-/* ====== Container לכל 3 האזורים התחתונים ====== */
-.content-sections {
-  grid-column: 1/-1; /* תופס את כל הרוחב */
+/* ====== Main wrapper (Grid 1fr 2fr 1fr) ====== */
+.app__main{
+  flex: 1;
+  min-height: 0;                 /* מאפשר גלילה פנימית לילדים */
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr; /* אותו יחס כמו הparent */
-  gap: 10px;
-  min-height: 0; /* מונע בעיות overflow */
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: var(--space-4);
+  padding: var(--space-5);
 }
 
-/* ====== Notice ====== */
-.notice {
-  background-color: blue;
-  padding: 20px; /* הוחלף height/width בpadding */
-  overflow-y: auto; /* גלילה במידת הצורך */
-}
-
-/* ====== MembersList ====== */
-.members-list {
-  
-  background-color: rgb(128, 128, 238);
-  padding: 20px; /* הוחלף height/width בpadding */
-  overflow-y: auto; /* גלילה במידת הצורך */
-}
-
-/* תיקון של רשימת החברים */
-.members-list-section-flex {
+/* ====== Filter Bar ====== */
+.filter-bar{
+  grid-column: 1 / -1;
   display: flex;
-  flex-direction: column;
-  gap: 10px; /* רווח אחיד בין כרטיסים */
-  align-items: stretch; /* כרטיסים ברוחב מלא */
-  height: 35rem;
-}
-
-.members-list-section-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 כרטיסים בשורה במקום auto-fit */
-  gap: 15px; /* הגדלתי הרווח בין כרטיסים */
-  width: 100%; /* תופס את כל הרוחב הזמין */
-  height: 35rem;
-}
-
-/* תיקון כרטיס חבר */
-.member-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px; /* הגדלתי הpadding */
-  border: 2px solid black;
-  border-radius: 8px; /* עיגול פינות לעיצוב נחמד יותר */
-  background-color: white; /* רקע לבן לקריאות */
-  min-height: 160px; /* הגדלתי גובה מינימלי */
-  justify-content: space-between; /* פיזור אחיד של התוכן */
-  width: 100%; /* תופס רוחב מלא בתוך הגריד */
-  color: purple;
-}
-
-/* עיצוב אווטר */
-.member-card__avatar {
-  width: 50px; /* הגדלתי גודל אווטר */
-  height: 50px;
-  border-radius: 50%; /* עיגול מושלם */
-  background-color: #666;
-  color: white;
-  display: flex; /* למרכז הטקסט */
+  gap: var(--space-3);
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1.1rem; /* הגדלתי גופן */
-  margin: 0; /* איפוס margin ברירת מחדל */
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  flex-shrink: 0;
 }
-
-/* עיצוב שם ותפקיד */
-.member-card__name {
-  margin: 5px 0;
-  font-weight: bold;
-  text-align: center;
-}
-
-.member-card__role {
-  margin: 5px 0;
-  font-size: 0.9rem;
-  color: #666;
-  text-align: center;
-}
-
-/* עיצוב כפתור פעולות */
-.member-card button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
+.filter-bar button{
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 0.8rem;
 }
-
-.member-card button:not(:disabled) {
-  background-color: #007bff;
-  color: white;
-}
-
-.member-card button:disabled {
-  background-color: #ccc; /* אפור לכפתור מושבת */
-  color: #666;
+.filter-bar button:disabled{
+  background: #cbd5e1;
+  border-color: #cbd5e1;
+  color: #f8fafc;
   cursor: not-allowed;
 }
 
-/* ====== TasksPanel ====== */
-.tasks-panel {
-  background-color: rgb(197, 197, 254);
-  padding: 20px; /* הוחלף height/width בpadding */
-  overflow-y: auto; /* גלילה במידת הצורך */
+/* ====== Content Sections (שלושת האזורים) ====== */
+.content-sections{
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: var(--space-4);
+  min-height: 0;
+  overflow: hidden;              /* הילדים יגללו פנימה */
+}
+.notice,
+.members-list,
+.tasks-panel{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: var(--space-5);
+  min-height: 0;
+  overflow: auto;                /* גלילה פנימית */
+}
+
+/* ====== Members List Modes ====== */
+.members-list-section-flex{
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  padding-block: var(--space-2);
+}
+.members-list-section-grid{
+  display: grid;
+  /* תמיד 3 בעמודה בדסקטופ */
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  justify-items: center;         /* מרכז כל כרטיס */
+  padding-block: var(--space-2);
+}
+
+/* ====== Empty State ====== */
+#no-tasks-show{
+  width: 100%;
+  text-align: center;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--warn) 30%, white);
+}
+
+/* ====== Member Card (גודל קבוע) ====== */
+.member-card{
+  width: var(--member-w);
+  height: var(--member-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);         /* מעט בהיר מהפאנל */
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  color: var(--text);
+}
+.member-card__avatar{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin: 0;
+}
+.member-card__name{
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.member-card__role{
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.member-card button{
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.member-card button:disabled{
+  background: #e5e7eb;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* ====== Task Card (גודל קבוע + שבירת טקסט) ====== */
+/* ודא שלכרטיסי המשימות יש class="task-card" */
+.task-card{
+  width: var(--task-w);
+  height: var(--task-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  overflow: hidden;
+}
+.task-card__title,
+.task-card__meta{
+  margin: 0;
+  white-space: normal;      /* לא לחתוך לשורה אחת */
+  overflow: visible;        /* לא להסתיר */
+  text-overflow: unset;     /* בלי ... */
+  word-break: break-word;   /* שבירת מילים ארוכות */
+}
+
+/* אופציונלי: גריד למשימות בגודל קבוע */
+.tasks-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--task-w), var(--task-w)));
+  grid-auto-rows: var(--task-h);
+  gap: var(--space-3);
+  justify-content: center;
 }
 
 /* ====== Footer ====== */
-.footer {
-  font-size: 0.8rem; /* שונה מ-smaller ליחידה מדויקת */
-  background-color: grey;
+.footer{
+  background: var(--panel-strong);
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
   text-align: center;
-  padding: 10px; /* הוסף padding */
-  flex-shrink: 0; /* מונע כיווץ */
-  margin-top: auto; /* דוחף לתחתית */
+  padding: var(--space-3) var(--space-5);
+  flex-shrink: 0;
 }
 
-/* ====== Responsive למסכים קטנים ====== */
-@media (max-width: 768px) {
-  .app__main {
-    grid-template-columns: 1fr; /* עמודה אחת במסכים קטנים */
-    gap: 5px; /* רווח קטן יותר */
+/* ====== Scrollbars (לא חובה) ====== */
+*{
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+*::-webkit-scrollbar{ width: 10px; height: 10px; }
+*::-webkit-scrollbar-track{ background: #f1f5f9; border-radius: 8px; }
+*::-webkit-scrollbar-thumb{ background: #cbd5e1; border-radius: 8px; border: 2px solid #f1f5f9; }
+
+/* ====== Responsive (Mobile) ====== */
+@media (max-width: 768px){
+  .app__main{
+    grid-template-columns: 1fr;       /* עמודה אחת */
+    gap: var(--space-3);
   }
-  
-  .content-sections {
-    grid-template-columns: 1fr; /* גם כאן עמודה אחת */
+  .content-sections{
+    grid-template-columns: 1fr;       /* גם כאן עמודה אחת */
   }
-  
-  .filter-bar {
-    flex-direction: column; /* בקרות אנכיות במסכים קטנים */
-    gap: 5px;
+  .filter-bar{
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: stretch;
   }
-  
-  .members-list-section-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* כרטיסים קטנים יותר */
-  }
+  /* במובייל אפשר לעבור ל-2 בעמודה אם תרצה:
+     .members-list-section-grid { grid-template-columns: repeat(2, 1fr); } */
 }
