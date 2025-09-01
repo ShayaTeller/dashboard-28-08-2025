@@ -41,7 +41,7 @@ export function ActiveMembersList({ members, classNameStatus,tasksShow }: Member
        .filter((m) => m.active === true)
        .map((m,i) => (
          <div className="members-list-item" key={`active-${m.id}index-${i}`}>   
-           <MemberCard id={m.id + 1} name={m.name} role={m.role} active={m.active} taskButton={tasksShow} />
+           <MemberCard id={m.id } name={m.name} role={m.role} active={m.active} taskButton={tasksShow} />
          </div>
        ))}
    </section>
